@@ -1,0 +1,10 @@
+{
+  "name": "Document Summary Assistant",
+  "short_name": "DocSummary",
+  "description": "AI-powered PDF and image document analysis and summarization assistant.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#000000",
+  "icons": []
+}
