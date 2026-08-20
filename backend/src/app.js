@@ -8,7 +8,11 @@ const app = express();
 
 app.use(
   cors({
-    origin: environment.clientUrl,
+    origin: [
+      "http://localhost:4174",
+      "http://localhost:5173",
+      "https://document-summary-assistant-tan.vercel.app",
+    ],
   })
 );
 
