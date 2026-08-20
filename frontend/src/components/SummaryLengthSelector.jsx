@@ -7,31 +7,49 @@ const SummaryLengthSelector = ({
       value: "short",
       title: "Short",
       description: "Quick overview",
+      detail: "Key information only",
     },
     {
       value: "medium",
       title: "Medium",
       description: "Balanced summary",
+      detail: "The recommended option",
+      recommended: true,
     },
     {
       value: "long",
       title: "Long",
       description: "Detailed analysis",
+      detail: "More context and explanation",
     },
   ];
 
   return (
     <section>
-      <div className="mb-4">
-        <h2 className="text-base font-semibold text-gray-900">
-          Summary Length
-        </h2>
+      {/* Heading */}
+      <div className="mb-5">
+        <div className="flex items-end justify-between gap-4">
+          <div>
+            <h2 className="text-[15px] font-semibold tracking-[-0.01em] text-[#111111]">
+              Summary depth
+            </h2>
 
-        <p className="mt-1 text-sm text-gray-500">
-          Choose how detailed you want your generated summary.
-        </p>
+            <p className="mt-1 text-sm leading-5 text-[#77756e]">
+              Choose how much detail you want in the analysis.
+            </p>
+          </div>
+
+          <span className="hidden text-[10px] font-semibold uppercase tracking-[0.14em] text-[#aaa79e] sm:block">
+            {selectedLength === "short"
+              ? "Quick"
+              : selectedLength === "medium"
+              ? "Recommended"
+              : "Detailed"}
+          </span>
+        </div>
       </div>
 
+      {/* Options */}
       <div className="grid grid-cols-1 gap-3 sm:grid-cols-3">
         {options.map((option) => {
           const isSelected = selectedLength === option.value;
@@ -42,45 +60,54 @@ const SummaryLengthSelector = ({
               type="button"
               onClick={() => onLengthChange(option.value)}
               aria-pressed={isSelected}
-              className={`group relative rounded-xl border-2 p-4 text-left transition-all duration-200 active:scale-[0.98] ${
+              className={`group relative w-full border px-4 py-4 text-left transition-all duration-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-[#111111] focus-visible:ring-offset-2 ${
                 isSelected
-                  ? "border-gray-900 bg-gray-900 text-white shadow-md"
-                  : "border-gray-200 bg-white text-gray-900 hover:border-gray-400 hover:shadow-sm"
+                  ? "border-[#111111] bg-[#f3f1eb]"
+                  : "border-[#d3d1ca] bg-white hover:border-[#8c8a83] hover:bg-[#faf9f6]"
               }`}
             >
-              {/* Selected Indicator */}
-              <div className="flex items-center justify-between">
-                <span className="text-sm font-semibold">
-                  {option.title}
-                </span>
+              <div className="flex items-start justify-between gap-4">
+                <div className="min-w-0">
 
+                  {/* Top row */}
+                  <div className="flex items-center gap-2">
+                    <p className="text-sm font-semibold tracking-[-0.01em] text-[#111111]">
+                      {option.title}
+                    </p>
+
+                    {option.recommended && (
+                      <span className="text-[9px] font-semibold uppercase tracking-[0.13em] text-[#77756e]">
+                        Recommended
+                      </span>
+                    )}
+                  </div>
+
+                  {/* Description */}
+                  <p className="mt-1.5 text-xs leading-5 text-[#5f5d57]">
+                    {option.description}
+                  </p>
+
+                  {/* Detail */}
+                  <p className="mt-2.5 text-[11px] leading-4 text-[#96938b]">
+                    {option.detail}
+                  </p>
+                </div>
+
+                {/* Selection indicator */}
                 <span
-                  className={`flex h-5 w-5 items-center justify-center rounded-full text-xs font-bold transition ${
+                  className={`mt-0.5 flex h-5 w-5 shrink-0 items-center justify-center border text-[10px] font-bold transition-all duration-200 ${
                     isSelected
-                      ? "bg-white text-gray-900"
-                      : "border border-gray-300 text-transparent group-hover:border-gray-400"
+                      ? "border-[#111111] bg-[#111111] text-white"
+                      : "border-[#c9c7c0] bg-white text-transparent group-hover:border-[#77756e]"
                   }`}
                 >
                   ✓
                 </span>
               </div>
 
-              {/* Description */}
-              <p
-                className={`mt-2 text-xs leading-relaxed ${
-                  isSelected
-                    ? "text-gray-300"
-                    : "text-gray-500"
-                }`}
-              >
-                {option.description}
-              </p>
-
-              {/* Selected Label */}
+              {/* Selected indicator */}
               {isSelected && (
-                <p className="mt-3 text-[11px] font-medium uppercase tracking-wide text-gray-400">
-                  Selected
-                </p>
+                <span className="absolute bottom-0 left-0 right-0 h-[2px] bg-[#111111]" />
               )}
             </button>
           );

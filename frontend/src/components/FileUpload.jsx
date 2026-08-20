@@ -71,8 +71,19 @@ const FileUpload = ({ selectedFile, onFileSelect }) => {
   const isImage = selectedFile?.type?.startsWith("image/");
   const isPdf = selectedFile?.type === "application/pdf";
 
+  const fileType = isPdf
+    ? "PDF"
+    : isImage
+      ? "IMAGE"
+      : "DOCUMENT";
+
   return (
     <div>
+
+      {/* =====================================================
+          EMPTY / UPLOAD STATE
+      ====================================================== */}
+
       {!selectedFile ? (
         <div
           onDrop={handleDrop}
@@ -83,53 +94,132 @@ const FileUpload = ({ selectedFile, onFileSelect }) => {
           tabIndex={0}
           onKeyDown={(event) => {
             if (event.key === "Enter" || event.key === " ") {
+              event.preventDefault();
               openFilePicker();
             }
           }}
-          className={`group cursor-pointer rounded-2xl border-2 border-dashed p-6 text-center transition-all duration-200 sm:p-10 ${
+          className={`group relative cursor-pointer overflow-hidden border transition-all duration-200 ${
             isDragging
-              ? "border-gray-900 bg-gray-100"
-              : "border-gray-300 bg-gray-50 hover:border-gray-400 hover:bg-gray-100"
+              ? "border-[#111111] bg-[#eeece6]"
+              : "border-[#cfcdd0] bg-[#faf9f6] hover:border-[#77756e] hover:bg-[#f5f3ee]"
           }`}
         >
-          <div className="mx-auto max-w-lg">
-            {/* Upload Icon */}
+
+          {/* Top metadata */}
+
+          <div className="flex items-center justify-between border-b border-[#d8d6cf] px-5 py-3 sm:px-7">
+
+            <span className="text-[10px] font-semibold uppercase tracking-[0.18em] text-[#77756e]">
+              Document input
+            </span>
+
+            <span className="text-[10px] font-medium uppercase tracking-[0.16em] text-[#aaa79e]">
+              10 MB max
+            </span>
+
+          </div>
+
+
+          {/* Main upload area */}
+
+          <div className="px-6 py-12 text-center sm:px-10 sm:py-16">
+
+            {/* Minimal document icon */}
+
             <div
-              className={`mx-auto flex h-16 w-16 items-center justify-center rounded-2xl text-2xl transition-all duration-200 ${
+              className={`mx-auto flex h-14 w-14 items-center justify-center border transition-all duration-200 ${
                 isDragging
-                  ? "bg-gray-900 text-white"
-                  : "bg-white text-gray-700 shadow-sm ring-1 ring-gray-200 group-hover:-translate-y-1 group-hover:shadow-md"
+                  ? "border-[#111111] bg-[#111111] text-white"
+                  : "border-[#c9c7c0] bg-white text-[#33322f] group-hover:-translate-y-0.5 group-hover:border-[#77756e]"
               }`}
             >
-              {isDragging ? "↓" : "↑"}
+              {isDragging ? (
+                <svg
+                  width="22"
+                  height="22"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    d="M12 16V4M12 4L7 9M12 4L17 9"
+                    stroke="currentColor"
+                    strokeWidth="1.5"
+                    strokeLinecap="square"
+                    strokeLinejoin="miter"
+                  />
+                  <path
+                    d="M5 14V18C5 19.1046 5.89543 20 7 20H17C18.1046 20 19 19.1046 19 18V14"
+                    stroke="currentColor"
+                    strokeWidth="1.5"
+                  />
+                </svg>
+              ) : (
+                <svg
+                  width="22"
+                  height="22"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    d="M7 3H14L19 8V21H7V3Z"
+                    stroke="currentColor"
+                    strokeWidth="1.5"
+                  />
+                  <path
+                    d="M14 3V8H19"
+                    stroke="currentColor"
+                    strokeWidth="1.5"
+                  />
+                  <path
+                    d="M10 13H16M10 17H16"
+                    stroke="currentColor"
+                    strokeWidth="1.5"
+                  />
+                </svg>
+              )}
             </div>
 
+
             {/* Heading */}
-            <h2 className="mt-5 text-lg font-semibold text-gray-900 sm:text-xl">
+
+            <h3 className="mt-7 text-xl font-semibold tracking-[-0.035em] text-[#111111] sm:text-2xl">
               {isDragging
-                ? "Drop your file here"
-                : "Upload your document"}
-            </h2>
+                ? "Drop your document here"
+                : "Choose a document"}
+            </h3>
+
 
             {/* Description */}
-            <p className="mx-auto mt-2 max-w-md text-sm leading-6 text-gray-500">
-              Drag and drop your PDF or image here, or choose a file from
-              your device.
+
+            <p className="mx-auto mt-3 max-w-md text-sm leading-6 text-[#6c6a64]">
+              {isDragging
+                ? "Release the file to begin."
+                : "Drag and drop your file here, or browse your device to select a document for analysis."}
             </p>
 
-            {/* Browse Button */}
+
+            {/* Browse */}
+
             <button
               type="button"
               onClick={(event) => {
                 event.stopPropagation();
                 openFilePicker();
               }}
-              className="mt-6 w-full rounded-lg bg-black px-5 py-3 text-sm font-medium text-white transition hover:bg-gray-800 active:scale-[0.98] sm:w-auto"
+              className="mt-7 inline-flex items-center gap-4 bg-[#111111] px-6 py-3.5 text-sm font-semibold text-white transition-all duration-200 hover:bg-[#2a2a2a] active:translate-y-px"
             >
-              Browse Files
+              Choose document
+
+              <span className="text-base">
+                →
+              </span>
             </button>
 
-            {/* Hidden Input */}
+
+            {/* Hidden input */}
+
             <input
               ref={inputRef}
               type="file"
@@ -138,96 +228,241 @@ const FileUpload = ({ selectedFile, onFileSelect }) => {
               className="hidden"
             />
 
-            {/* Supported Files */}
-            <div className="mt-6 flex flex-wrap items-center justify-center gap-2">
-              <span className="rounded-md bg-white px-2.5 py-1 text-xs font-medium text-gray-600 ring-1 ring-gray-200">
-                PDF
-              </span>
 
-              <span className="rounded-md bg-white px-2.5 py-1 text-xs font-medium text-gray-600 ring-1 ring-gray-200">
-                PNG
-              </span>
+            {/* File formats */}
 
-              <span className="rounded-md bg-white px-2.5 py-1 text-xs font-medium text-gray-600 ring-1 ring-gray-200">
-                JPG
-              </span>
+            <div className="mt-9 flex flex-wrap items-center justify-center gap-x-5 gap-y-2">
 
-              <span className="rounded-md bg-white px-2.5 py-1 text-xs font-medium text-gray-600 ring-1 ring-gray-200">
-                JPEG
-              </span>
+              {["PDF", "PNG", "JPG", "JPEG"].map((type) => (
+                <span
+                  key={type}
+                  className="text-[10px] font-semibold uppercase tracking-[0.16em] text-[#8b8981]"
+                >
+                  {type}
+                </span>
+              ))}
+
             </div>
 
-            <p className="mt-3 text-xs text-gray-400">
-              Maximum file size: 10 MB
+          </div>
+
+
+          {/* Bottom helper line */}
+
+          <div className="border-t border-[#d8d6cf] px-5 py-3 sm:px-7">
+
+            <p className="text-center text-[10px] uppercase tracking-[0.14em] text-[#aaa79e]">
+              PDF text extraction · OCR · Vision analysis
             </p>
+
           </div>
+
         </div>
+
       ) : (
-        <div className="rounded-2xl border border-gray-200 bg-gray-50 p-4 sm:p-5">
-          <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
-            {/* File Information */}
-            <div className="flex min-w-0 items-center gap-3 sm:gap-4">
-              {isImage && previewUrl ? (
-                <div className="h-16 w-16 shrink-0 overflow-hidden rounded-xl border border-gray-200 bg-white sm:h-20 sm:w-20">
-                  <img
-                    src={previewUrl}
-                    alt="Selected document preview"
-                    className="h-full w-full object-cover"
-                  />
+
+        /* ===================================================
+           SELECTED FILE STATE
+        ================================================== */
+
+        <div className="border border-[#cfcdd0] bg-[#faf9f6]">
+
+          {/* Header */}
+
+          <div className="flex items-center justify-between border-b border-[#d8d6cf] px-5 py-3 sm:px-7">
+
+            <span className="text-[10px] font-semibold uppercase tracking-[0.18em] text-[#77756e]">
+              Selected document
+            </span>
+
+            <span className="flex items-center gap-2 text-[10px] font-semibold uppercase tracking-[0.16em] text-[#5e6c59]">
+
+              <span className="h-1.5 w-1.5 bg-[#5e6c59]" />
+
+              Ready for analysis
+
+            </span>
+
+          </div>
+
+
+          {/* File content */}
+
+          <div className="p-5 sm:p-7">
+
+            <div className="flex flex-col gap-6 sm:flex-row sm:items-center sm:justify-between">
+
+              {/* File information */}
+
+              <div className="flex min-w-0 items-center gap-5">
+
+                {/* Preview */}
+
+                {isImage && previewUrl ? (
+
+                  <div className="h-20 w-20 shrink-0 overflow-hidden border border-[#d8d6cf] bg-white sm:h-24 sm:w-24">
+
+                    <img
+                      src={previewUrl}
+                      alt="Selected document preview"
+                      className="h-full w-full object-cover"
+                    />
+
+                  </div>
+
+                ) : (
+
+                  <div className="flex h-20 w-20 shrink-0 items-center justify-center border border-[#d8d6cf] bg-white sm:h-24 sm:w-24">
+
+                    {isPdf ? (
+                      <svg
+                        width="28"
+                        height="28"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        xmlns="http://www.w3.org/2000/svg"
+                        className="text-[#33322f]"
+                      >
+                        <path
+                          d="M7 3H14L19 8V21H7V3Z"
+                          stroke="currentColor"
+                          strokeWidth="1.5"
+                        />
+                        <path
+                          d="M14 3V8H19"
+                          stroke="currentColor"
+                          strokeWidth="1.5"
+                        />
+                        <path
+                          d="M10 13H16M10 17H14"
+                          stroke="currentColor"
+                          strokeWidth="1.5"
+                        />
+                      </svg>
+                    ) : (
+                      <svg
+                        width="28"
+                        height="28"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        xmlns="http://www.w3.org/2000/svg"
+                        className="text-[#33322f]"
+                      >
+                        <rect
+                          x="4"
+                          y="4"
+                          width="16"
+                          height="16"
+                          stroke="currentColor"
+                          strokeWidth="1.5"
+                        />
+                        <circle
+                          cx="9"
+                          cy="9"
+                          r="1.5"
+                          stroke="currentColor"
+                          strokeWidth="1.5"
+                        />
+                        <path
+                          d="M5 17L10 12L13 15L15 13L19 17"
+                          stroke="currentColor"
+                          strokeWidth="1.5"
+                        />
+                      </svg>
+                    )}
+
+                  </div>
+                )}
+
+
+                {/* Details */}
+
+                <div className="min-w-0">
+
+                  <p className="break-all text-base font-semibold tracking-[-0.02em] text-[#111111]">
+                    {selectedFile.name}
+                  </p>
+
+                  <div className="mt-2 flex flex-wrap items-center gap-3">
+
+                    <span className="text-[10px] font-semibold uppercase tracking-[0.16em] text-[#77756e]">
+                      {fileType}
+                    </span>
+
+                    <span className="h-3 w-px bg-[#d0cec7]" />
+
+                    <span className="text-xs text-[#77756e]">
+                      {(selectedFile.size / (1024 * 1024)).toFixed(2)} MB
+                    </span>
+
+                  </div>
+
+                  <p className="mt-3 text-xs leading-5 text-[#8b8981]">
+
+                    {isImage
+                      ? "Image content will be processed using Vision analysis."
+                      : "Text will be extracted from the PDF before analysis."}
+
+                  </p>
+
                 </div>
-              ) : (
-                <div className="flex h-16 w-16 shrink-0 items-center justify-center rounded-xl border border-gray-200 bg-white text-2xl sm:h-20 sm:w-20 sm:text-3xl">
-                  {isPdf ? "📄" : "📎"}
-                </div>
-              )}
 
-              <div className="min-w-0">
-                <p className="break-all text-sm font-semibold text-gray-900">
-                  {selectedFile.name}
-                </p>
-
-                <div className="mt-1 flex flex-wrap items-center gap-2 text-xs text-gray-500">
-                  <span>
-                    {(selectedFile.size / (1024 * 1024)).toFixed(2)} MB
-                  </span>
-
-                  <span>•</span>
-
-                  <span>
-                    {isPdf ? "PDF" : isImage ? "Image" : "Document"}
-                  </span>
-                </div>
-
-                <p className="mt-2 text-xs leading-5 text-gray-400">
-                  {isImage
-                    ? "Image will be analyzed using Vision + AI"
-                    : "PDF text will be extracted and analyzed with AI"}
-                </p>
               </div>
+
+
+              {/* Remove */}
+
+              <button
+                type="button"
+                onClick={handleRemove}
+                className="inline-flex shrink-0 items-center justify-center gap-3 border border-[#cfcdd0] bg-white px-5 py-3 text-xs font-semibold uppercase tracking-[0.12em] text-[#4d4b46] transition-colors hover:border-[#111111] hover:text-[#111111]"
+              >
+                Remove
+
+                <span className="text-base leading-none">
+                  ×
+                </span>
+
+              </button>
+
             </div>
 
-            {/* Remove Button */}
-            <button
-              type="button"
-              onClick={handleRemove}
-              className="w-full shrink-0 rounded-lg border border-gray-200 bg-white px-4 py-2.5 text-sm font-medium text-gray-700 transition hover:bg-gray-100 active:scale-[0.98] sm:w-auto"
-            >
-              Remove
-            </button>
           </div>
+
         </div>
       )}
 
-      {/* Validation Error */}
+
+      {/* =====================================================
+          VALIDATION ERROR
+      ====================================================== */}
+
       {error && (
-        <div className="mt-3 flex items-start gap-3 rounded-xl border border-red-100 bg-red-50 p-4">
-          <span className="flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-red-100 text-xs font-bold text-red-600">
-            !
-          </span>
+        <div className="mt-4 border border-[#d8b9b4] bg-[#f8ece9] px-5 py-4">
 
-          <p className="text-sm leading-5 text-red-600">{error}</p>
+          <div className="flex items-start gap-3">
+
+            <span className="mt-0.5 flex h-5 w-5 shrink-0 items-center justify-center border border-[#9c5147] text-xs font-bold text-[#9c5147]">
+              !
+            </span>
+
+            <div>
+
+              <p className="text-[10px] font-semibold uppercase tracking-[0.16em] text-[#9c5147]">
+                File error
+              </p>
+
+              <p className="mt-1 text-sm leading-6 text-[#713c36]">
+                {error}
+              </p>
+
+            </div>
+
+          </div>
+
         </div>
       )}
+
     </div>
   );
 };
