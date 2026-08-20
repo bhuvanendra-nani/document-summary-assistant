@@ -1,3 +1,4 @@
+
 @import "tailwindcss";
 
 * {
@@ -12,6 +13,7 @@ body {
   margin: 0;
   min-width: 320px;
   min-height: 100vh;
+
   font-family:
     Inter,
     system-ui,
@@ -19,15 +21,47 @@ body {
     BlinkMacSystemFont,
     "Segoe UI",
     sans-serif;
-  background-color: #f3f4f6;
-  color: #111827;
+
+  background-color: #f8fafc;
+  color: #0f172a;
+
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 
 button,
-input {
+input,
+textarea,
+select {
   font: inherit;
 }
 
 button {
   cursor: pointer;
 }
+
+button:disabled {
+  cursor: not-allowed;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+img {
+  max-width: 100%;
+  display: block;
+}
+
+::selection {
+  background-color: #dbeafe;
+  color: #1e3a8a;
+}
+
+/* Prevent horizontal overflow on small screens */
+html,
+body {
+  overflow-x: hidden;
+}
+
